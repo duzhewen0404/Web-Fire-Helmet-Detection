@@ -1,0 +1,33 @@
+body {
+    background-image: url('../images/pexels-henrix-4059469.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 90vh;
+    margin: 0; /* 移除默認的body邊距 */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 0px 20px 0px; /* 調整內邊距，順序上右下左*/
+    border-radius: 10px;
+    margin-top: 80px; /* 調整容器頂部邊距 */
+    max-width: 400px;
+    width: 20%;
+}
+
+/* Set placeholder text color */
+::placeholder {
+    color: #6c757d;
+    opacity: 1; /* Override browser default opacity */
+}
+
+/* Adjust input and button styles on focus */
+.form-control:focus {
+    box-shadow: none;
+    border-color: #007bff; /*點擊時有淺藍色*/
+}
+
+.btn:focus {
+    box-shadow: none;
+}

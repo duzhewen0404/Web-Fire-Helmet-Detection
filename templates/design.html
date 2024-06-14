@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>CCTV</title>
+    <!-- 引入Bootstrap CSS進行設計 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> \
+    <link rel="stylesheet" href="static/css/design.css">
+    <!-- 引入jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- 左側導航欄 -->
+        <div class="col-lg-2">
+            <h2 class="mt-3">Select camera video</h2>
+            <!-- 攝像頭選擇下拉選單 -->
+            <select id="camera-select" class="form-control">
+                <option value="0">Helmet</option>
+                <option value="1">Fire-Smoke</option>
+            </select>
+            <h2 class="mt-3">Video list</h2>
+            <!-- 視頻列表 -->
+            <ul id="video-list" class="list-group">
+                <!-- Initial list -->
+            </ul>
+            <!-- 注銷按鈕 -->
+            <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
+        </div>
+        <!-- 右側主要內容 -->
+        <div class="col-lg-9">
+            <h1 class="mt-3">AI-Live</h1>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h3>Helmet_detection</h3>
+                    <!-- 直播流圖像 -->
+                    <img id="live-stream-0" class="live-stream" src="{{ url_for('video_start', cam_index=0) }}" width="100%">
+                </div>
+                <div class="col-lg-6">
+                    <h3>Fire-Smoke_detection</h3>
+                    <!-- 直播流圖像 -->
+                    <img id="live-stream-1" class="live-stream" src="{{ url_for('video_start', cam_index=1) }}" width="100%">
+                </div>
+            </div>
+            <!-- 視頻播放器 -->
+            <h2 class="mt-3">Video Player</h2>
+            <video id="video-player" width="100%" height="500" controls></video>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // 更新視頻列表函數
+        function updateVideoList() {
+            let cameraIndex = $('#camera-select').val();
+            $.get('/list_videos/' + cameraIndex, function(data) {
+                $('#video-list').empty();
+                for (let video of data.videos) {
+                    $('#video-list').append('<li class="list-group-item" data-camera="' + cameraIndex + '">' + video + '</li>');
+                }
+            });
+        }
+        
+        // 當攝像頭選擇改變，更新list
+        $('#camera-select').change(function() {
+            updateVideoList();
+        });
+
+        // 當視頻list-item被點擊，更新list
+        $('#video-list').on('click', 'li', function() {
+            let video = $(this).text();
+            let cameraIndex = $(this).data('camera');
+            let videoUrl = '/static/' + (cameraIndex == 0 ? 'yolo_videos/' : 'fire_videos/') + video;
+            //更新video來源
+            $('#video-player').attr('src', videoUrl);
+        });
+
+        // 自動觸發攝像頭選擇改變事件，初始化列表
+        $('#camera-select').trigger('change');
+
+        // Update video_list per min.
+        setInterval(updateVideoList, 60000);
+
+        // 點擊 live-stream 影像時放大
+        $(document).on('click', '.live-stream', function(event) {
+            event.stopPropagation();
+            $('.live-stream').not(this).removeClass('zoomed');  // 確保只有點擊的影像被放大
+            $(this).toggleClass('zoomed');
+        });
+
+        // 點擊其他地方復原影像大小
+        $(document).on('click', function(event) {
+            if (!$(event.target).hasClass('live-stream')) {
+                $('.live-stream').removeClass('zoomed');
+            }
+        });
+    });
+</script>
+</body>
+</html>

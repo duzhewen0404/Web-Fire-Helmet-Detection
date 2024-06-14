@@ -1,0 +1,9 @@
+.zoomed { /*點擊放大stream視窗*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 90%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+}
