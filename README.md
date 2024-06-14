@@ -7,7 +7,11 @@
    cd 至目標資料夾前一層，再輸入
 ```bash
    python web_flask.py
-``` 
+```
+點擊網址
+```bash
+   http://127.0.0.1:5500/
+```
 
 ### 網頁設計(Frontend)
 
