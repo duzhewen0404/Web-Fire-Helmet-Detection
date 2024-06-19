@@ -62,5 +62,6 @@
 4. 將轉檔後的影片以原檔名蓋過原檔，使用os.rename會產生"FileExistsError: [WinError 183] 當檔案已存在時，無法建立該檔案"的問題(3hr chatgpt...)。
 
     sol: 引入shutil函式庫，利用shutil.move強制覆蓋
+
    參考資料:
     - [help 3-1]( https://www.jianshu.com/p/f39a444dee46)
